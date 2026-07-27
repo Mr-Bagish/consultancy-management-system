@@ -1,0 +1,84 @@
+.support-container{
+    display:flex;
+    gap:25px;
+    padding:30px;
+}
+
+.support-left{
+    flex:2;
+}
+
+.support-right{
+    flex:1;
+}
+
+.support-card,
+.contact-card,
+.faq-card{
+    background:white;
+    border-radius:12px;
+    padding:25px;
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
+    margin-bottom:20px;
+}
+
+.support-card h2{
+    margin-bottom:10px;
+}
+
+.support-card p{
+    margin-bottom:20px;
+    color:#666;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    margin-bottom:18px;
+}
+
+.form-group label{
+    margin-bottom:8px;
+    font-weight:600;
+}
+
+.form-group input,
+.form-group textarea{
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    font-size:15px;
+}
+
+.send-btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:8px;
+    background:#2563eb;
+    color:white;
+    cursor:pointer;
+}
+
+.send-btn:hover{
+    background:#1d4ed8;
+}
+
+.contact-card h3,
+.faq-card h3{
+    margin-bottom:15px;
+}
+
+.contact-card p{
+    margin-bottom:12px;
+    color:#555;
+}
+
+.faq-card ul{
+    padding-left:20px;
+}
+
+.faq-card li{
+    margin-bottom:12px;
+    color:#555;
+}

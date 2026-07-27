@@ -113,7 +113,7 @@ background: #e6d6db;
   padding: 13px;
   border: none;
   border-radius: 8px;
-  background: #3d5afe;
+  background: #4285f4;
   color: white;
   font-size: 16px;
   cursor: pointer;
@@ -121,7 +121,7 @@ background: #e6d6db;
 }
 
 .login-btn:hover {
-  background: #304ffe;
+  background: #2d73df;
 }
 
 .divider {
@@ -150,7 +150,7 @@ background: #e6d6db;
 }
 
 .google-btn:hover {
-  background: #f7f7f7;
+  background: #cfc7c7;
 }
 
 .google-icon {

@@ -1,0 +1,29 @@
+.dashboard {
+  display: flex;
+}
+
+.dashboard-content {
+  margin-left: 170px;
+  width: calc(100% - 190px);
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+.dashboard-body {
+  padding: 30px;
+}
+
+.dashboard-body h2 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.dashboard-body p {
+  color: #666;
+}
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:25px;
+    margin-top:30px;
+}
