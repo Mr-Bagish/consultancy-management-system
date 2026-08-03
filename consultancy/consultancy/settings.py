@@ -38,12 +38,23 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+<<<<<<< HEAD
     'rest_framework',
     'drf_yasg',
+=======
+    'drf_yasg',
+    'rest_framework',
+>>>>>>> cad0fff8bd5ec3f098208153bb3bcb9ef58d7a72
     'accounts',
+    'content',
     'bookings',
-    'content',    # ← add this
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
