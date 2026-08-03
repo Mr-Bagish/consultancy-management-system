@@ -1,89 +1,117 @@
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
-from .models import Profile
-import json
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import IsAdminUser
+from .models import Booking
+from django.utils import timezone
+from datetime import timedelta
 
 
-@csrf_exempt
-def register_view(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        username = data.get('username')
-        email = data.get('email')
-        password = data.get('password')
+# ── View All Bookings (Admin only) ──
+class AllBookingsView(APIView):
+    permission_classes = [IsAdminUser]
 
-        if User.objects.filter(username=username).exists():
-            return JsonResponse({'error': 'Username already taken'}, status=400)
-
-        user = User.objects.create_user(
-            username=username,
-            email=email,
-            password=password
-        )
-        Profile.objects.create(user=user, is_admin=False)
-        return JsonResponse({'message': 'Registered successfully'})
-
-    return JsonResponse({'error': 'POST request required'}, status=405)
-
-
-@csrf_exempt
-def login_view(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        username = data.get('username')
-        password = data.get('password')
-
-        user = authenticate(request, username=username, password=password)
-        if user:
-            login(request, user)
-            return JsonResponse({
-                'message': 'Login successful',
-                'username': user.username
+    def get(self, request):
+        bookings = Booking.objects.all().order_by('-created_at')
+        data = []
+        for booking in bookings:
+            data.append({
+                'id': booking.id,
+                'client': booking.client.username,
+                'service': booking.service.name if booking.service else None,
+                'provider_name': booking.provider_name,
+                'booking_date': str(booking.booking_date),
+                'booking_time': str(booking.booking_time),
+                'phone_no': booking.phone_no,
+                'status': booking.status,
+                'created_at': str(booking.created_at),
             })
-        return JsonResponse({'error': 'Wrong username or password'}, status=401)
-
-    return JsonResponse({'error': 'POST request required'}, status=405)
+        return Response(data)
 
 
-@csrf_exempt
-def logout_view(request):
-    logout(request)
-    return JsonResponse({'message': 'Logged out successfully'})
+# ── Update Booking Status (Admin only) ──
+class UpdateBookingStatusView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def patch(self, request, pk):
+        try:
+            booking = Booking.objects.get(pk=pk)
+        except Booking.DoesNotExist:
+            return Response(
+                {'error': 'Booking not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        new_status = request.data.get('status')
+        valid_statuses = ['new', 'contacted', 'scheduled', 'completed']
+
+        if new_status not in valid_statuses:
+            return Response(
+                {'error': f'Invalid status! Choose from {valid_statuses}'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        booking.status = new_status
+        booking.save()
+
+        return Response({
+            'message': 'Status updated successfully',
+            'booking_id': booking.id,
+            'new_status': booking.status
+        })
 
 
-@csrf_exempt
-def admin_login_view(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        username = data.get('username')
-        password = data.get('password')
+# ── Assign Consultant (Admin only) ──
+class AssignConsultantView(APIView):
+    permission_classes = [IsAdminUser]
 
-        user = authenticate(request, username=username, password=password)
-        if user:
-            try:
-                profile = Profile.objects.get(user=user)
-                if profile.is_admin:
-                    login(request, user)
-                    return JsonResponse({
-                        'message': 'Admin login successful',
-                        'username': user.username
-                    })
-                else:
-                    return JsonResponse(
-                        {'error': 'You are not an admin'},
-                        status=403
-                    )
-            except Profile.DoesNotExist:
-                return JsonResponse(
-                    {'error': 'Profile not found'},
-                    status=404
-                )
+    def patch(self, request, pk):
+        try:
+            booking = Booking.objects.get(pk=pk)
+        except Booking.DoesNotExist:
+            return Response(
+                {'error': 'Booking not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
 
-        return JsonResponse(
-            {'error': 'Wrong username or password'},
-            status=401
-        )
+        provider_name = request.data.get('provider_name')
 
-    return JsonResponse({'error': 'POST request required'}, status=405)
+        if not provider_name:
+            return Response(
+                {'error': 'provider_name is required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        booking.provider_name = provider_name
+        booking.save()
+
+        return Response({
+            'message': 'Consultant assigned successfully',
+            'booking_id': booking.id,
+            'provider_name': booking.provider_name
+        })
+
+
+# ── Analytics (Admin only) ──
+class AnalyticsView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        total = Booking.objects.count()
+        new = Booking.objects.filter(status='new').count()
+        contacted = Booking.objects.filter(status='contacted').count()
+        scheduled = Booking.objects.filter(status='scheduled').count()
+        completed = Booking.objects.filter(status='completed').count()
+
+        this_week = Booking.objects.filter(
+            created_at__gte=timezone.now() - timedelta(days=7)
+        ).count()
+
+        return Response({
+            'total_bookings': total,
+            'new': new,
+            'contacted': contacted,
+            'scheduled': scheduled,
+            'completed': completed,
+            'this_week': this_week,
+        })
