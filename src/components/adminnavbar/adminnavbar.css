@@ -1,0 +1,77 @@
+.admin-navbar{
+    height:80px;
+    background:#fff;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 30px;
+
+    border-bottom:1px solid #e5e5e5;
+}
+
+.admin-title{
+    font-size:24px;
+    font-weight:600;
+}
+
+.search-box{
+    width:420px;
+    position:relative;
+}
+
+.search-box input{
+    width:100%;
+    height:42px;
+
+    padding:0 45px 0 15px;
+
+    border:1px solid #ddd;
+    border-radius:8px;
+
+    outline:none;
+    font-size:15px;
+}
+
+.search-icon{
+    position:absolute;
+    right:15px;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:#777;
+}
+
+.navbar-right{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.notification-btn{
+    border:none;
+    background:transparent;
+
+    font-size:20px;
+
+    cursor:pointer;
+}
+
+.admin-profile{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    background:#f7f7f7;
+
+    padding:8px 15px;
+
+    border-radius:8px;
+}
+
+.admin-profile svg{
+    font-size:22px;
+    color:#2563eb;
+}

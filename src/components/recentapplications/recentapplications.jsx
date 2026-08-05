@@ -1,58 +1,83 @@
 import "./recentapplications.css";
 
 function RecentApplications() {
+
   const applications = [
     {
-      university: "University of Sydney",
-      program: "Master of IT",
-      intake: "Feb 2027",
-      status: "Under Review",
+      client: "John Rai",
+      destination: "Canada",
+      service: "Student Visa",
+      date: "Oct 22",
+      status: "Pending",
     },
     {
-      university: "Deakin University",
-      program: "Master of Data Science",
-      intake: "July 2027",
-      status: "Accepted",
+      client: "James Gurung",
+      destination: "Australia",
+      service: "Admission",
+      date: "Oct 21",
+      status: "Completed",
     },
     {
-      university: "Monash University",
-      program: "MBA",
-      intake: "Feb 2027",
-      status: "Documents Pending",
+      client: "Hari Bista",
+      destination: "UK",
+      service: "Visa Processing",
+      date: "Nov 1",
+      status: "In Progress",
     },
   ];
 
   return (
-    <div className="table-card">
+    <div className="recent-card">
 
-      <div className="table-header">
+      <div className="recent-header">
         <h3>Recent Applications</h3>
-
-        <button>View All</button>
       </div>
 
-      <table>
+      <table className="recent-table">
 
         <thead>
-
           <tr>
-            <th>University</th>
-            <th>Program</th>
-            <th>Intake</th>
+            <th>Client Name</th>
+            <th>Destination</th>
+            <th>Service</th>
+            <th>Date</th>
             <th>Status</th>
+            <th>Action</th>
           </tr>
-
         </thead>
 
         <tbody>
 
           {applications.map((item, index) => (
+
             <tr key={index}>
-              <td>{item.university}</td>
-              <td>{item.program}</td>
-              <td>{item.intake}</td>
-              <td>{item.status}</td>
+
+              <td>{item.client}</td>
+
+              <td>{item.destination}</td>
+
+              <td>{item.service}</td>
+
+              <td>{item.date}</td>
+
+              <td>
+                <span
+                  className={`status ${item.status
+                    .toLowerCase()
+                    .replace(" ", "-")}`}
+                >
+                  {item.status}
+                </span>
+              </td>
+
+              <td>
+                <button className="view-btn">
+                  View
+                </button>
+              </td>
+
             </tr>
+
           ))}
 
         </tbody>
