@@ -1,0 +1,184 @@
+/* ================= ABOUT ================= */
+
+.about{
+
+    width:90%;
+    margin:70px auto;
+
+}
+
+/* Heading */
+
+.about-heading{
+
+    text-align:center;
+
+}
+
+.about-heading span{
+
+    display:inline-block;
+    background:#edf4ff;
+    color:#2d6cdf;
+    padding:8px 18px;
+    border-radius:30px;
+    font-weight:600;
+    letter-spacing:1px;
+
+}
+
+.about-heading h1{
+
+    margin-top:25px;
+    font-size:48px;
+    color:#1d3557;
+    line-height:1.3;
+
+}
+
+/* Content */
+
+.about-content{
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:60px;
+
+    margin-top:60px;
+
+}
+
+.about-text{
+
+    flex:1;
+
+}
+
+.about-text p{
+
+    font-size:18px;
+    line-height:2;
+    color:#555;
+    text-align:justify;
+
+}
+
+.about-image{
+
+    flex:1;
+
+}
+
+.about-image img{
+
+    width:100%;
+    border-radius:15px;
+
+}
+
+/* Services Image */
+
+.about-services{
+
+    margin:80px 0;
+
+}
+
+.about-services img{
+
+    width:100%;
+    border-radius:12px;
+
+}
+
+/* ================= TEAM ================= */
+
+.team-heading{
+
+    text-align:center;
+    margin-bottom:60px;
+
+}
+
+.team-heading span{
+
+    color:#4a90e2;
+    letter-spacing:3px;
+    font-size:14px;
+    font-weight:bold;
+
+}
+
+.team-heading h2{
+
+    margin-top:15px;
+    font-size:42px;
+    color:#1d3557;
+
+}
+
+.team-heading p{
+
+    width:700px;
+    max-width:90%;
+    margin:20px auto 0;
+    color:#666;
+    line-height:1.8;
+    font-size:17px;
+
+}
+
+/* Grid */
+
+.team-grid{
+
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:35px;
+    margin-bottom:80px;
+
+}
+
+/* Card */
+
+.team-card{
+
+    background:#fff;
+    border-radius:15px;
+    overflow:hidden;
+    box-shadow:0 8px 25px rgba(0,0,0,0.08);
+    transition:.3s;
+
+}
+
+.team-card:hover{
+
+    transform:translateY(-8px);
+
+}
+
+.team-card img{
+
+    width:100%;
+    height:auto;
+    display:block;
+
+}
+
+.team-card h3{
+
+    margin-top:18px;
+    text-align:center;
+    color:#1d3557;
+    font-size:23px;
+
+}
+
+.team-card p{
+
+    text-align:center;
+    color:#777;
+    margin:8px 0 25px;
+
+}

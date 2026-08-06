@@ -1,0 +1,27 @@
+import { Routes, Route } from "react-router-dom";
+
+import Home from "./pages/Home";
+import About from "./pages/About";
+import PublicServices from "./pages/PublicServices";
+import Contact from "./pages/Contact";
+import Booking from "./pages/Booking";
+
+function PublicWebsite(){
+
+    return(
+
+        <Routes>
+
+            <Route path="/" element={<Home/>}/>
+            <Route path="/about" element={<About/>}/>
+            <Route path="/services" element={<PublicServices/>}/>
+            <Route path="/contact" element={<Contact/>}/>
+            <Route path="/booking" element={<Booking/>}/>
+
+        </Routes>
+
+    )
+
+}
+
+export default PublicWebsite;
