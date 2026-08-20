@@ -38,16 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-<<<<<<< HEAD
     'rest_framework',
     'drf_yasg',
-=======
-    'drf_yasg',
-    'rest_framework',
->>>>>>> cad0fff8bd5ec3f098208153bb3bcb9ef58d7a72
     'accounts',
-    'content',
     'bookings',
+    'content',
 ]
 
 REST_FRAMEWORK = {
