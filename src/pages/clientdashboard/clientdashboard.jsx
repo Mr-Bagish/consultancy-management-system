@@ -3,8 +3,8 @@ import Navbar from "../../components/navbar/navbar";
 import "./clientdashboard.css";
 import SummaryCards from "../../components/summarycards/summarycards";
 import UpcomingBookings from "../../components/upcomingbookings/upcomingbookings";
-import RecentApplications from "../../components/recentapplications/recentapplications";
-import RightPanel from "../../components/rightpanel/rightpanel";
+
+
 
 function ClientDashboard() {
   const user = {
@@ -33,8 +33,8 @@ function ClientDashboard() {
 
           <div className="dashboard-grid">
             <UpcomingBookings />
-            <RecentApplications />
-            <RightPanel />
+            
+            
           </div>
         </div>
       </div>
