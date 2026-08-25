@@ -14,7 +14,9 @@ import Settings from "./pages/clientdashboard/setting/setting";
 import AdminDashboard from "./pages/admindashboard/admindashboard";
 import Applications from "./pages/admindashboard/applications/applications";
 import AdminLogin from "./pages/adminlogin/adminlogin";
-
+import AdminAppointment from "./pages/admindashboard/adminappointment/adminappointment";
+import AdminClients from "./pages/admindashboard/adminclients/adminclients";
+import AdminSettings from "./pages/admindashboard/adminsettings/adminsettings";
 function App() {
   return (
     <Routes>
@@ -36,6 +38,9 @@ function App() {
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/admin/dashboard" element={<AdminDashboard />} />
       <Route path="/admin/applications" element={<Applications />} />
+      <Route path="/admin/appointments" element={<AdminAppointment />} />
+      <Route path="/admin/clients" element={<AdminClients />} />
+      <Route path="/admin/settings" element={<AdminSettings />} />
     </Routes>
   );
 }

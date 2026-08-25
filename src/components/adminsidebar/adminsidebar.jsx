@@ -37,10 +37,7 @@ function AdminSidebar() {
           <span>Clients</span>
         </NavLink>
 
-        <NavLink to="/admin/services" className="admin-link">
-          <FaConciergeBell />
-          <span>Services</span>
-        </NavLink>
+       
 
         <NavLink to="/admin/appointments" className="admin-link">
           <FaCalendarAlt />
