@@ -1,0 +1,52 @@
+/* ===================== Destinations ===================== */
+
+.destinations{
+    width:90%;
+    margin:70px auto;
+    text-align:center;
+}
+
+.destinations h2{
+    font-size:36px;
+    color:#1d3557;
+    margin-bottom:10px;
+}
+
+.destination-text{
+    color:#666;
+    margin-bottom:40px;
+    font-size:18px;
+}
+
+.destination-container{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:30px;
+    width:100%;
+}
+
+.destination-card{
+    flex:1;
+    text-align:center;
+}
+
+.destination-card img{
+    width:100%;
+    max-width:320px;
+    height:190px;
+    object-fit:cover;
+    border-radius:10px;
+    box-shadow:0 8px 18px rgba(0,0,0,0.15);
+}
+
+.destination-card h3{
+    margin-top:15px;
+    font-size:28px;
+    color:#163a6b;
+    font-weight:600;
+}
+
+.destination-card p{
+    display:none;
+}

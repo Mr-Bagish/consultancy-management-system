@@ -1,21 +1,30 @@
 import "./summarycards.css";
-import { FaFileAlt, FaCalendarCheck, FaMoneyBillWave } from "react-icons/fa";
+import {
+  FaFileAlt,
+  FaCalendarCheck,
+  FaMoneyBillWave,
+} from "react-icons/fa";
 
 function SummaryCards() {
   const cards = [
     {
-      title: "Active Bookings",
+      title: "Active Applications",
       value: "2",
       icon: <FaFileAlt />,
       color: "#2563eb",
     },
     {
-      title: "Upcoming Service",
+      title: "Next Appointment",
       value: "28 July • 11:00 AM",
       icon: <FaCalendarCheck />,
       color: "#10b981",
     },
-   
+    {
+      title: "Fees Paid",
+      value: "Rs. 85,000",
+      icon: <FaMoneyBillWave />,
+      color: "#f59e0b",
+    },
   ];
 
   return (
