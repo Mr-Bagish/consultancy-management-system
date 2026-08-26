@@ -1,12 +1,14 @@
 import "./signup.css";
 import logo from "../../assets/images/logo.png";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import AuthButton from "../../components/AuthButton";
 import GoogleButton from "../../components/GoogleButton";
 import InputField from "../../components/InputField";
 import PasswordField from "../../components/PasswordField";
 function Signup() {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -23,47 +25,82 @@ function Signup() {
     return emailRegex.test(email);
   };
 
-  const handleSignup = () => {
-    const newErrors = {};
+  const handleSignup = async () => {
+  const newErrors = {};
 
-    if (!name.trim()) {
-      newErrors.name = "Full name is required";
-    }
+  if (!name.trim()) {
+    newErrors.name = "Full name is required";
+  }
 
-    if (!email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!validateEmail(email)) {
-      newErrors.email = "Please enter a valid email";
-    }
+  if (!email.trim()) {
+    newErrors.email = "Email is required";
+  } else if (!validateEmail(email)) {
+    newErrors.email = "Please enter a valid email";
+  }
 
-    if (!password.trim()) {
-      newErrors.password = "Password is required";
-    }
+  if (!password.trim()) {
+    newErrors.password = "Password is required";
+  }
 
-    if (!confirmPassword.trim()) {
-      newErrors.confirmPassword = "Confirm password is required";
-    } else if (password !== confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
-    }
+  if (!confirmPassword.trim()) {
+    newErrors.confirmPassword = "Confirm password is required";
+  } else if (password !== confirmPassword) {
+    newErrors.confirmPassword = "Passwords do not match";
+  }
 
-    setErrors(newErrors);
+  setErrors(newErrors);
 
-    if (Object.keys(newErrors).length === 0) {
-      setLoading(true);
+  if (Object.keys(newErrors).length !== 0) {
+    return;
+  }
 
-      setTimeout(() => {
-        console.log({
-          name,
-          email,
-          password,
-          confirmPassword,
+  setLoading(true);
+
+  try {
+    const response = await axios.post(
+      "http://127.0.0.1:8000/api/accounts/signup/",
+      {
+        full_name: name,
+        email: email,
+        password: password,
+        confirm_password: confirmPassword,
+      }
+    );
+
+    console.log("Signup successful:", response.data);
+
+    // Go to login after successful signup
+    navigate("/");
+
+  } catch (error) {
+    console.error("Signup error:", error);
+
+    if (error.response?.data) {
+      const backendErrors = error.response.data;
+
+      // Handle email already exists / other backend validation
+      if (backendErrors.non_field_errors) {
+        setErrors({
+          general: backendErrors.non_field_errors[0],
         });
-
-        setLoading(false);
-      }, 2000);
+      } else if (backendErrors.email) {
+        setErrors({
+          email: backendErrors.email[0],
+        });
+      } else {
+        setErrors({
+          general: "Unable to create account.",
+        });
+      }
+    } else {
+      setErrors({
+        general: "Unable to connect to the server.",
+      });
     }
-  };
-
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className="signup-container">
       <div className="signup-card">
@@ -147,7 +184,9 @@ function Signup() {
             }
             error={errors.confirmPassword}
             />
-
+            {errors.general && (
+  <p className="error-message">{errors.general}</p>
+)}
           <AuthButton
             text="Sign Up"
             loadingText="Signing up..."

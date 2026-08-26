@@ -1,6 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./login.css";
 import logo from "../../assets/images/logo.png";
+import axios from "axios";
 
 import { useState } from "react";
 import AuthButton from "../../components/AuthButton";
@@ -8,7 +9,11 @@ import GoogleButton from "../../components/GoogleButton";
 import InputField from "../../components/InputField";
 import PasswordField from "../../components/PasswordField";
 function Login(){
+    
+    const navigate = useNavigate();
+
     const [email,setEmail]=useState("");
+    
     const [password,setPassword]=useState("");
     const [showPassword, setShowPassword]=useState(false);
     const [errors,setErrors]=useState({});
@@ -18,29 +23,57 @@ function Login(){
         const emailRegex=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     }
-    const handleLogin = () => {
-        const newErrors = {};
+   const handleLogin = async () => {
+    const newErrors = {};
 
-       if (!email.trim()) {
+    if (!email.trim()) {
         newErrors.email = "Email is required";
-        } else if (!validateEmail(email)) {
-            newErrors.email = "Please enter a valid email address";
-        }
+    } else if (!validateEmail(email)) {
+        newErrors.email = "Please enter a valid email address";
+    }
 
-        if (!password.trim()) {
+    if (!password.trim()) {
         newErrors.password = "Password is required";
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length !== 0) {
+        return;
+    }
+
+    setLoading(true);
+
+    try {
+        const response = await axios.post(
+            "http://127.0.0.1:8000/api/accounts/login/",
+            {
+                email: email,
+                password: password,
+            }
+        );
+
+        localStorage.setItem("access_token", response.data.access);
+        localStorage.setItem("refresh_token", response.data.refresh);
+
+        console.log("Login successful");
+
+        navigate("/client/dashboard");
+
+    } catch (error) {
+        if (error.response?.status === 401) {
+            setErrors({
+                general: "Invalid email or password."
+            });
+        } else {
+            setErrors({
+                general: "Unable to connect to the server."
+            });
         }
-
-        setErrors(newErrors);
-
-        if (Object.keys(newErrors).length === 0) {
-            setLoading(true);
-            setTimeout(()=>{
-        console.log("Login Successful");
-        console.log(email, password);
+    } finally {
         setLoading(false);
-        },2000);
-    }}
+    }
+};
     return (
         <div className="login-container">
             <div className="login-card">
@@ -86,7 +119,9 @@ function Login(){
             togglePassword={() => setShowPassword(!showPassword)}
             error={errors.password}
         />
-
+        {errors.general && (
+    <p className="error-message">{errors.general}</p>
+)}
         <AuthButton
             text="Login"
             loadingText="Logging in..."
