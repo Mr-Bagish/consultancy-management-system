@@ -9,12 +9,12 @@ from .views import (
     AssignConsultantView,
     AnalyticsView,
 )
-
+ 
 
 urlpatterns = [
     # User booking endpoints
     path(
-        "bookings/",
+        "bookings/create",
         BookingCreateView.as_view(),
         name="booking-create",
     ),
