@@ -1,53 +1,41 @@
-from django.contrib.auth import authenticate
-from rest_framework import status
-from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
-from drf_yasg.utils import swagger_auto_schema
-
-from .serializers import SignupSerializer, LoginSerializer
+from django.contrib.auth import authenticate
 
 
-class SignupView(APIView):
-    @swagger_auto_schema(request_body=SignupSerializer)
+class AdminLoginView(APIView):
+    permission_classes = [AllowAny]
+
     def post(self, request):
-        serializer = SignupSerializer(data=request.data)
+        username = request.data.get('username')
+        password = request.data.get('password')
 
-        if serializer.is_valid():
-            serializer.save()
+        if not username or not password:
             return Response(
-                {"message": "User created successfully."},
-                status=status.HTTP_201_CREATED,
+                {'error': 'Username and password are required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        user = authenticate(username=username, password=password)
+
+        if user:
+            if user.is_staff:
+                refresh = RefreshToken.for_user(user)
+                return Response({
+                    'message': 'Admin login successful',
+                    'username': user.username,
+                    'access': str(refresh.access_token),
+                    'refresh': str(refresh),
+                })
+            return Response(
+                {'error': 'You are not an admin'},
+                status=status.HTTP_403_FORBIDDEN
             )
 
         return Response(
-            serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST
-        )
-
-
-class LoginView(APIView):
-    @swagger_auto_schema(request_body=LoginSerializer)
-    def post(self, request):
-        email = request.data.get("email")
-        password = request.data.get("password")
-
-        user = authenticate(
-            username=email,
-            password=password,
-        )
-
-        if user is None:
-            return Response(
-                {"error": "Invalid email or password."},
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
-
-        refresh = RefreshToken.for_user(user)
-
-        return Response(
-            {
-                "refresh": str(refresh),
-                "access": str(refresh.access_token),
-            }
+            {'error': 'Wrong username or password'},
+            status=status.HTTP_401_UNAUTHORIZED
         )

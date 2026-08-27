@@ -1,6 +1,23 @@
-myenv/
+# Database
+db.sqlite3
+
+# Environment variables
 .env
+*.env
+
+# Python
 __pycache__/
-*.py[cod]
-.vscode/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
 django_venv/
+venv/
+env/
+
+# VS Code
+.vscode/
+
+# ngrok
+*.log
