@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Booking
+from .models import Booking, BookingDocument
 
 
 class BookingSerializer(serializers.ModelSerializer):
@@ -20,3 +20,9 @@ class BookingSerializer(serializers.ModelSerializer):
             "status",
             "created_at",
         ]
+
+class BookingDocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BookingDocument
+        fields = ['id', 'booking', 'file', 'uploaded_at']
+        read_only_fields = ['id', 'uploaded_at']
