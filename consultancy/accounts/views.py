@@ -1,33 +1,44 @@
-from django.contrib.auth import authenticate
+from .serializers import SignupSerializer, LoginSerializer
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.tokens import RefreshToken
-from drf_yasg.utils import swagger_auto_schema
-
-from .serializers import SignupSerializer, LoginSerializer
+from django.contrib.auth import authenticate
 
 
 class SignupView(APIView):
+    permission_classes = [AllowAny]
+
     @swagger_auto_schema(request_body=SignupSerializer)
     def post(self, request):
         serializer = SignupSerializer(data=request.data)
 
         if serializer.is_valid():
-            serializer.save()
+            user = serializer.save()
+
             return Response(
-                {"message": "User created successfully."},
+                {
+                    "message": "Signup successful",
+                    "user": {
+                        "id": user.id,
+                        "full_name": user.get_full_name(),
+                        "email": user.email,
+                    },
+                },
                 status=status.HTTP_201_CREATED,
             )
 
         return Response(
             serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
 
 class LoginView(APIView):
+    permission_classes = [AllowAny]
+
     @swagger_auto_schema(request_body=LoginSerializer)
     def post(self, request):
         email = request.data.get("email")
@@ -50,7 +61,8 @@ class LoginView(APIView):
             {
                 "refresh": str(refresh),
                 "access": str(refresh.access_token),
-            }
+            },
+            status=status.HTTP_200_OK,
         )
 
 
@@ -58,8 +70,53 @@ class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        return Response({
-            "id": request.user.id,
-            "full_name": request.user.get_full_name(),
-            "email": request.user.email,
-        })
+        return Response(
+            {
+                "id": request.user.id,
+                "full_name": request.user.get_full_name(),
+                "email": request.user.email,
+            }
+        )
+
+
+class AdminLoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        username = request.data.get("username")
+        password = request.data.get("password")
+
+        if not username or not password:
+            return Response(
+                {"error": "Username and password are required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        user = authenticate(
+            username=username,
+            password=password,
+        )
+
+        if user:
+            if user.is_staff:
+                refresh = RefreshToken.for_user(user)
+
+                return Response(
+                    {
+                        "message": "Admin login successful",
+                        "username": user.username,
+                        "access": str(refresh.access_token),
+                        "refresh": str(refresh),
+                    },
+                    status=status.HTTP_200_OK,
+                )
+
+            return Response(
+                {"error": "You are not an admin"},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        return Response(
+            {"error": "Wrong username or password"},
+            status=status.HTTP_401_UNAUTHORIZED,
+        )
