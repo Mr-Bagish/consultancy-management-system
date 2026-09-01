@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from drf_yasg.utils import swagger_auto_schema
 
@@ -51,3 +52,14 @@ class LoginView(APIView):
                 "access": str(refresh.access_token),
             }
         )
+
+
+class ProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({
+            "id": request.user.id,
+            "full_name": request.user.get_full_name(),
+            "email": request.user.email,
+        })

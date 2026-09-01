@@ -70,7 +70,7 @@ function Signup() {
     console.log("Signup successful:", response.data);
 
     // Go to login after successful signup
-    navigate("/");
+    navigate("/login");
 
   } catch (error) {
     console.error("Signup error:", error);

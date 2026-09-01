@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   FaTachometerAlt,
   FaCalendarAlt,
@@ -13,6 +13,14 @@ import "./sidebar.css";
 
 function Sidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
+
+const handleLogout = () => {
+  localStorage.removeItem("access_token");
+  localStorage.removeItem("refresh_token");
+
+  navigate("/login");
+};
 
   const menuItems = [
     {
@@ -70,10 +78,10 @@ function Sidebar() {
 
     </div>
 
-    <button className="logout-btn">
-      <FaSignOutAlt />
-      Logout
-    </button>
+   <button className="logout-btn" onClick={handleLogout}>
+  <FaSignOutAlt />
+  Logout
+</button>
 
   </aside>
 

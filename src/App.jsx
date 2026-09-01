@@ -17,6 +17,7 @@ import AdminLogin from "./pages/adminlogin/adminlogin";
 import AdminAppointment from "./pages/admindashboard/adminappointment/adminappointment";
 import AdminClients from "./pages/admindashboard/adminclients/adminclients";
 import AdminSettings from "./pages/admindashboard/adminsettings/adminsettings";
+import ProtectedRoute from "./components/protectedroutes/protectedroutes";
 function App() {
   return (
     <Routes>
@@ -28,11 +29,50 @@ function App() {
       <Route path="/signup" element={<Signup />} />
 
       {/* Client Dashboard */}
-      <Route path="/client/dashboard" element={<Client />} />
-      <Route path="/client/booking" element={<Booking />} />
-      <Route path="/client/services" element={<Services />} />
-      <Route path="/client/support" element={<Support />} />
-      <Route path="/client/setting" element={<Settings />} />
+     <Route
+  path="/client/dashboard"
+  element={
+    <ProtectedRoute>
+      <Client />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/client/booking"
+  element={
+    <ProtectedRoute>
+      <Booking />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/client/services"
+  element={
+    <ProtectedRoute>
+      <Services />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/client/support"
+  element={
+    <ProtectedRoute>
+      <Support />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/client/setting"
+  element={
+    <ProtectedRoute>
+      <Settings />
+    </ProtectedRoute>
+  }
+/>
 
       {/* Admin */}
       <Route path="/admin/login" element={<AdminLogin />} />

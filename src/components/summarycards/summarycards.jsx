@@ -8,7 +8,7 @@ import {
 function SummaryCards() {
   const cards = [
     {
-      title: "Active Applications",
+      title: "Active Bookings",
       value: "2",
       icon: <FaFileAlt />,
       color: "#2563eb",
@@ -19,12 +19,7 @@ function SummaryCards() {
       icon: <FaCalendarCheck />,
       color: "#10b981",
     },
-    {
-      title: "Fees Paid",
-      value: "Rs. 85,000",
-      icon: <FaMoneyBillWave />,
-      color: "#f59e0b",
-    },
+    
   ];
 
   return (
