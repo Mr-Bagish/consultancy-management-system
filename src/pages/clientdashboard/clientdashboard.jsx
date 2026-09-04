@@ -11,6 +11,8 @@ function ClientDashboard() {
     email: "",
   });
 
+  const [bookings, setBookings] = useState([]);
+
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("access_token");
@@ -43,6 +45,43 @@ function ClientDashboard() {
     fetchUser();
   }, []);
 
+  // Fetch user's bookings
+  useEffect(() => {
+    const fetchBookings = async () => {
+      const token = localStorage.getItem("access_token");
+
+      if (!token) {
+        console.error("No access token found");
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          "http://127.0.0.1:8000/api/bookings/my-bookings/",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch bookings");
+        }
+
+        const data = await response.json();
+
+        console.log("My bookings:", data);
+
+        setBookings(data);
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+      }
+    };
+
+    fetchBookings();
+  }, []);
+
   return (
     <div className="dashboard">
       <Sidebar />
@@ -61,10 +100,10 @@ function ClientDashboard() {
             from one place.
           </p>
 
-          <SummaryCards />
+          <SummaryCards bookings={bookings} />
 
           <div className="dashboard-grid">
-            <UpcomingBookings />
+            <UpcomingBookings bookings={bookings} />
           </div>
         </div>
       </div>

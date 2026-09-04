@@ -3,11 +3,17 @@ from .models import Booking, BookingDocument
 
 
 class BookingSerializer(serializers.ModelSerializer):
+    service_name = serializers.CharField(
+        source="service.name",
+        read_only=True
+    )
+
     class Meta:
         model = Booking
         fields = [
             "id",
             "service",
+            "service_name",
             "provider_name",
             "booking_date",
             "booking_time",
@@ -19,7 +25,9 @@ class BookingSerializer(serializers.ModelSerializer):
             "id",
             "status",
             "created_at",
+            "service_name",
         ]
+
 
 class BookingDocumentSerializer(serializers.ModelSerializer):
     class Meta:

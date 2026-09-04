@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 
 
 class SignupView(APIView):
@@ -119,4 +120,61 @@ class AdminLoginView(APIView):
         return Response(
             {"error": "Wrong username or password"},
             status=status.HTTP_401_UNAUTHORIZED,
+        )
+
+
+class AdminClientsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        if not request.user.is_staff:
+            return Response(
+                {"error": "Admin access required"},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        users = User.objects.filter(
+            is_staff=False
+        ).order_by("-date_joined")
+
+        clients = []
+
+        for user in users:
+            clients.append(
+                {
+                    "id": user.id,
+                    "name": user.get_full_name(),
+                    "email": user.email,
+                    "status": "Active" if user.is_active else "Inactive",
+                }
+            )
+
+        return Response(
+            clients,
+            status=status.HTTP_200_OK,
+        )
+
+    def delete(self, request, client_id):
+        if not request.user.is_staff:
+            return Response(
+                {"error": "Admin access required"},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        try:
+            user = User.objects.get(
+                id=client_id,
+                is_staff=False
+            )
+        except User.DoesNotExist:
+            return Response(
+                {"error": "Client not found"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        user.delete()
+
+        return Response(
+            {"message": "Client deleted successfully"},
+            status=status.HTTP_200_OK,
         )

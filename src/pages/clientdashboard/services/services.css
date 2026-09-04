@@ -48,3 +48,22 @@
 .service-card button:hover {
   background: #1d4ed8;
 }
+.services-message {
+  color: #555;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+.services-error {
+  color: #dc2626;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+.service-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 18px;
+}

@@ -85,3 +85,53 @@ tr:hover {
 .view-btn:hover {
   background: #1d4ed8;
 }
+.consultant-box {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.consultant-box input {
+    width: 120px;
+    padding: 7px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    outline: none;
+}
+
+.consultant-box input:focus {
+    border-color: #2563eb;
+}
+
+.assign-btn {
+    border: none;
+    background: #10b981;
+    color: white;
+    padding: 7px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.assign-btn:hover {
+    background: #059669;
+}
+
+.status.new {
+    background: #fff3cd;
+    color: #d97706;
+}
+
+.status.contacted {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.status.scheduled {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.status.completed {
+    background: #e5e7eb;
+    color: #374151;
+}

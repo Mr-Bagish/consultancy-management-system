@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import "./overviewcards.css";
 import {
   FaUsers,
@@ -7,28 +8,80 @@ import {
 } from "react-icons/fa";
 
 function OverviewCards() {
+  const [analytics, setAnalytics] = useState({
+    total_bookings: 0,
+    new: 0,
+    contacted: 0,
+    scheduled: 0,
+    completed: 0,
+    this_week: 0,
+  });
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      const token = localStorage.getItem("admin_access_token");
+
+      if (!token) {
+        setError("Admin login required.");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          "http://127.0.0.1:8000/api/bookings/analytics/",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch analytics");
+        }
+
+        const data = await response.json();
+
+        console.log("Analytics:", data);
+
+        setAnalytics(data);
+      } catch (error) {
+        console.error("Error fetching analytics:", error);
+        setError("Unable to load analytics.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAnalytics();
+  }, []);
+
   const cards = [
     {
-      title: "Total Clients",
-      value: "150",
+      title: "Total Bookings",
+      value: analytics.total_bookings,
       icon: <FaUsers />,
       color: "#2563eb",
     },
     {
-      title: "New Enquiries",
-      value: "20",
+      title: "New Bookings",
+      value: analytics.new,
       icon: <FaUserPlus />,
       color: "#16a34a",
     },
     {
-      title: "Successful Appointments",
-      value: "55",
+      title: "Scheduled Appointments",
+      value: analytics.scheduled,
       icon: <FaCalendarCheck />,
       color: "#7c3aed",
     },
     {
-      title: "Pending Applications",
-      value: "18",
+      title: "This Week",
+      value: analytics.this_week,
       icon: <FaClipboardList />,
       color: "#ea580c",
     },
@@ -43,14 +96,19 @@ function OverviewCards() {
         </div>
 
         <button className="filter-btn">
-          Last 30 Days
+          This Week
         </button>
       </div>
+
+      {error && (
+        <p className="error-message">
+          {error}
+        </p>
+      )}
 
       <div className="overview-grid">
         {cards.map((card, index) => (
           <div className="overview-card" key={index}>
-
             <div
               className="overview-icon"
               style={{ background: card.color }}
@@ -59,10 +117,9 @@ function OverviewCards() {
             </div>
 
             <div>
-              <h3>{card.value}</h3>
+              <h3>{loading ? "..." : card.value}</h3>
               <p>{card.title}</p>
             </div>
-
           </div>
         ))}
       </div>

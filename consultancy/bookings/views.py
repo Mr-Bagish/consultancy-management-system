@@ -69,6 +69,7 @@ class AllBookingsView(APIView):
                     "service": booking.service.name if booking.service else None,
                     "provider_name": booking.provider_name,
                     "booking_date": str(booking.booking_date),
+                    "booking_time": str(booking.booking_time) if booking.booking_time else None,
                     "status": booking.status,
                     "created_at": str(booking.created_at),
                 })

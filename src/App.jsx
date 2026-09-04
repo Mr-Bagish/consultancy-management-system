@@ -18,6 +18,7 @@ import AdminAppointment from "./pages/admindashboard/adminappointment/adminappoi
 import AdminClients from "./pages/admindashboard/adminclients/adminclients";
 import AdminSettings from "./pages/admindashboard/adminsettings/adminsettings";
 import ProtectedRoute from "./components/protectedroutes/protectedroutes";
+
 function App() {
   return (
     <Routes>

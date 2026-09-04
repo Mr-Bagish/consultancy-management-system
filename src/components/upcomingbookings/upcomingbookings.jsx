@@ -1,26 +1,46 @@
 import "./upcomingbookings.css";
 
-function UpcomingBookings() {
-  const bookings = [
-    {
-      serviceName: "Career and Education Counselling",
-      dateTime: "Oct 24, 2:00 PM",
-      provider: "Karan Joshi",
-      status: "Confirmed",
-    },
-    {
-      serviceName: "Interview Preparation",
-      dateTime: "Nov 02, 9:00 AM",
-      provider: "Sushma Rai",
-      status: "Pending",
-    },
-    {
-      serviceName: "Visa Consultation",
-      dateTime: "Nov 10, 11:30 AM",
-      provider: "Ramesh Shrestha",
-      status: "Confirmed",
-    },
-  ];
+function UpcomingBookings({ bookings }) {
+  // Sort bookings by date and time
+  const sortedBookings = [...bookings].sort((a, b) => {
+    const dateA = new Date(
+      `${a.booking_date}T${a.booking_time || "00:00:00"}`
+    );
+
+    const dateB = new Date(
+      `${b.booking_date}T${b.booking_time || "00:00:00"}`
+    );
+
+    return dateA - dateB;
+  });
+
+  // Show only the first 3 upcoming bookings
+  const upcomingBookings = sortedBookings.slice(0, 3);
+
+  // Format date and time
+  const formatDateTime = (booking) => {
+    if (!booking.booking_date) {
+      return "-";
+    }
+
+    const date = new Date(
+      `${booking.booking_date}T${booking.booking_time || "00:00:00"}`
+    );
+
+    const formattedDate = date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
+
+    const formattedTime = booking.booking_time
+      ? date.toLocaleTimeString("en-US", {
+          hour: "numeric",
+          minute: "2-digit",
+        })
+      : "Time not set";
+
+    return `${formattedDate}, ${formattedTime}`;
+  };
 
   return (
     <div className="table-card">
@@ -42,14 +62,33 @@ function UpcomingBookings() {
         </thead>
 
         <tbody>
-          {bookings.map((item, index) => (
-            <tr key={index}>
-              <td>{item.serviceName}</td>
-              <td>{item.dateTime}</td>
-              <td>{item.provider}</td>
-              <td>{item.status}</td>
+          {upcomingBookings.length > 0 ? (
+            upcomingBookings.map((booking) => (
+              <tr key={booking.id}>
+                <td>
+                 {booking.service_name || "Service not available"}
+                </td>
+
+                <td>
+                  {formatDateTime(booking)}
+                </td>
+
+                <td>
+                  {booking.provider_name || "Not assigned"}
+                </td>
+
+                <td>
+                  {booking.status || "New"}
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="4" style={{ textAlign: "center" }}>
+                No upcoming bookings
+              </td>
             </tr>
-          ))}
+          )}
         </tbody>
 
       </table>
